@@ -1,0 +1,7 @@
+ - build test with proper endianess
+ - test complex messages
+ - add default messages (Header, Time, Duration)
+ - write a small tutorial
+
+ - checkout 64bit compatibility (it's not there, let's see if we can do anyhow
+   by modifying the grow_len)
