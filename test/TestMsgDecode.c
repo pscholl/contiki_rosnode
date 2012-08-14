@@ -32,7 +32,8 @@
  * Author(s): Philipp Scholl <scholl@ess.tu-darmstadt.de>
  */
 
-#include <challenge_msgs/Test.h>
+#include <contiki_rosnode/Test.h>
+#include <contiki_rosnode/TestComplex.h>
 #include <ros.h>
 #include <assert.h>
 #include <stdint.h>
@@ -179,13 +180,153 @@ void TestSimpleRoundtrip()
   assert (ds->x == obj.x);
 }
 
+void TestComplexRoundtrip()
+{
+  TestComplex_t obj = {
+    .some_number = 8,
+    .test_static = { {
+      .from_node = "abc",
+      .to_node   = "cde",
+      .quality   = {1,2,3,4,5,6,7,8},
+      .a         = 0xdeadbeef,
+      .b         = 0xbeefdead,
+      .c         = 0xbeef,
+      .d         = 0xcd,
+      .i16arr    = rosarr(int16_t, 1),
+      .x         = 0xdeadbeef }, {
+
+      .from_node = "second",
+      .to_node   = "one",
+      .quality   = {1,2,3,4,5,6,7,8},
+      .a         = 0xdeadbeef,
+      .b         = 0xbeefdead,
+      .c         = 0xbeef,
+      .d         = 0xcd,
+      .i16arr    = rosarr(int16_t, 1,2,3),
+      .x         = 0xdeadbeef } },
+    .another_number = 16,
+
+    .test_dynamic = rosarr(Test_t*, &(Test_t) {
+      .from_node = "third",
+      .to_node   = "one",
+      .quality   = {1,2,3,4,5,6,7,8},
+      .a         = 0xdeadbeef,
+      .b         = 0xbeefdead,
+      .c         = 0xbeef,
+      .d         = 0xcd,
+      .i16arr    = rosarr(int16_t, 1),
+    }, &(Test_t) {
+      .from_node = "fourth",
+      .to_node   = "one",
+      .quality   = {8,7,6,5,4,3,2,1},
+      .a         = 0xdeadbeef,
+      .b         = 0xbeefdead,
+      .c         = 0xbeef,
+      .d         = 0xcd,
+      .i16arr    = rosarr(int16_t, 1,-12,12),
+    }),
+
+    .aString     = "mylittlestring",
+    .sStrings    = { "numberone", "numbertwo"},
+    .dStrings    = rosarr(char*, "abc", "cdejkl", ""),
+  };
+
+  TestComplex_t *ds;
+  uint8_t buf[500];
+  size_t i,j;
+
+  i = TestComplex_serialize(&obj,buf,sizeof(buf));
+  //printf("%d\n",i);
+  assert(i==263);
+
+  ds = TestComplex_deserialize(buf,sizeof(buf));
+  assert (ds!=NULL);
+
+  assert (ds->some_number == obj.some_number);
+
+  assert (strlen(ds->test_static[0].from_node) == strlen(obj.test_static[0].from_node));
+  assert (strncmp(ds->test_static[0].from_node,obj.test_static[0].from_node,strlen(ds->test_static[0].from_node))==0);
+  assert (strlen(ds->test_static[0].to_node) == strlen(obj.test_static[0].to_node));
+  assert (strncmp(ds->test_static[0].to_node,obj.test_static[0].to_node,strlen(ds->test_static[0].to_node))==0);
+  for (i=0; i<8; i++)
+    assert(ds->test_static[0].quality[i]==obj.test_static[0].quality[i]);
+  assert (ds->test_static[0].a == obj.test_static[0].a);
+  assert (ds->test_static[0].b == obj.test_static[0].b);
+  assert (ds->test_static[0].c == obj.test_static[0].c);
+  assert (ds->test_static[0].d == obj.test_static[0].d);
+  assert (roslen(ds->test_static[0].i16arr) == roslen(obj.test_static[0].i16arr));
+  for (i=0; i<roslen(ds->test_static[0].i16arr); i++)
+    assert (ds->test_static[0].i16arr[i]==obj.test_static[0].i16arr[i]);
+  assert (ds->test_static[0].x == obj.test_static[0].x);
+
+  assert (strlen(ds->test_static[1].from_node) == strlen(obj.test_static[1].from_node));
+  assert (strncmp(ds->test_static[1].from_node,obj.test_static[1].from_node,strlen(ds->test_static[1].from_node))==0);
+  assert (strlen(ds->test_static[1].to_node) == strlen(obj.test_static[1].to_node));
+  assert (strncmp(ds->test_static[1].to_node,obj.test_static[1].to_node,strlen(ds->test_static[1].to_node))==0);
+  for (i=1; i<8; i++)
+    assert(ds->test_static[1].quality[i]==obj.test_static[1].quality[i]);
+  assert (ds->test_static[1].a == obj.test_static[1].a);
+  assert (ds->test_static[1].b == obj.test_static[1].b);
+  assert (ds->test_static[1].c == obj.test_static[1].c);
+  assert (ds->test_static[1].d == obj.test_static[1].d);
+  assert (roslen(ds->test_static[1].i16arr) == roslen(obj.test_static[1].i16arr));
+  for (i=1; i<roslen(ds->test_static[1].i16arr); i++)
+    assert (ds->test_static[1].i16arr[i]==obj.test_static[1].i16arr[i]);
+  assert (ds->test_static[1].x == obj.test_static[1].x);
+
+  //printf("%s %s\n",ds->sStrings[0],obj.sStrings[0]);
+  assert (strlen(ds->sStrings[0]) == strlen(obj.sStrings[0]));
+  assert (strncmp(ds->sStrings[0],obj.sStrings[0],strlen(ds->sStrings[0]))==0);
+  assert (strlen(ds->sStrings[1]) == strlen(obj.sStrings[1]));
+  assert (strncmp(ds->sStrings[1],obj.sStrings[1],strlen(ds->sStrings[1]))==0);
+
+  assert (strlen(ds->dStrings[0]) == strlen(obj.dStrings[0]));
+  assert (strncmp(ds->dStrings[0],obj.dStrings[0],strlen(ds->dStrings[0]))==0);
+  assert (strlen(ds->dStrings[1]) == strlen(obj.dStrings[1]));
+  assert (strncmp(ds->dStrings[1],obj.dStrings[1],strlen(ds->dStrings[1]))==0);
+  assert (strlen(ds->dStrings[2]) == strlen(obj.dStrings[2]));
+  assert (strncmp(ds->dStrings[2],obj.dStrings[2],strlen(ds->dStrings[2]))==0);
+
+  assert (roslen(ds->test_dynamic)==roslen(obj.test_dynamic));
+  assert (roslen(ds->test_dynamic)==2);
+
+  assert (strlen(ds->test_dynamic[0]->from_node) == strlen(obj.test_dynamic[0]->from_node));
+  assert (strncmp(ds->test_dynamic[0]->from_node,obj.test_dynamic[0]->from_node,strlen(ds->test_dynamic[0]->from_node))==0);
+  assert (strlen(ds->test_dynamic[0]->to_node) == strlen(obj.test_dynamic[0]->to_node));
+  assert (strncmp(ds->test_dynamic[0]->to_node,obj.test_dynamic[0]->to_node,strlen(ds->test_dynamic[0]->to_node))==0);
+  for (i=0; i<8; i++)
+    assert(ds->test_dynamic[0]->quality[i]==obj.test_dynamic[0]->quality[i]);
+  assert (ds->test_dynamic[0]->a == obj.test_dynamic[0]->a);
+  assert (ds->test_dynamic[0]->b == obj.test_dynamic[0]->b);
+  assert (ds->test_dynamic[0]->c == obj.test_dynamic[0]->c);
+  assert (ds->test_dynamic[0]->d == obj.test_dynamic[0]->d);
+  assert (roslen(ds->test_dynamic[0]->i16arr) == roslen(obj.test_dynamic[0]->i16arr));
+  for (i=0; i<roslen(ds->test_dynamic[0]->i16arr); i++)
+    assert (ds->test_dynamic[0]->i16arr[i]==obj.test_dynamic[0]->i16arr[i]);
+  assert (ds->test_dynamic[0]->x == obj.test_dynamic[0]->x);
+
+  assert (strlen(ds->test_dynamic[1]->from_node) == strlen(obj.test_dynamic[1]->from_node));
+  assert (strncmp(ds->test_dynamic[1]->from_node,obj.test_dynamic[1]->from_node,strlen(ds->test_dynamic[1]->from_node))==0);
+  assert (strlen(ds->test_dynamic[1]->to_node) == strlen(obj.test_dynamic[1]->to_node));
+  assert (strncmp(ds->test_dynamic[1]->to_node,obj.test_dynamic[1]->to_node,strlen(ds->test_dynamic[1]->to_node))==0);
+  for (i=0; i<8; i++)
+    assert(ds->test_dynamic[1]->quality[i]==obj.test_dynamic[1]->quality[i]);
+  assert (ds->test_dynamic[1]->a == obj.test_dynamic[1]->a);
+  assert (ds->test_dynamic[1]->b == obj.test_dynamic[1]->b);
+  assert (ds->test_dynamic[1]->c == obj.test_dynamic[1]->c);
+  assert (ds->test_dynamic[1]->d == obj.test_dynamic[1]->d);
+  assert (roslen(ds->test_dynamic[1]->i16arr) == roslen(obj.test_dynamic[1]->i16arr));
+  for (i=0; i<roslen(ds->test_dynamic[1]->i16arr); i++)
+    assert (ds->test_dynamic[1]->i16arr[i]==obj.test_dynamic[1]->i16arr[i]);
+  assert (ds->test_dynamic[1]->x == obj.test_dynamic[1]->x);
+}
+
 int main (int argc, char const* argv[])
 {
-  TestSimpleDeserial();
   TestSimpleSerial();
+  TestSimpleDeserial();
   TestSimpleRoundtrip();
-  //TestSimpleSerialDeserial();
-  //TestComplexDeserial();
+  TestComplexRoundtrip();
 
   return 0;
 }

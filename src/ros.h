@@ -34,9 +34,11 @@
 #ifndef __ROS_H_
 # define __ROS_H_
 
-# define rosarr(type,e,...) ((struct {uint32_t len; type data[sizeof((type[]) {e,##__VA_ARGS__})/sizeof(type)];}) {.len=sizeof((type[]) {e,##__VA_ARGS__}), .data={e,##__VA_ARGS__} }).data
-# define rosarr_n(type,n)   ((struct {uint32_t len; type data[n];}) {.len=n}).data
-# define roslen(ptr)        (*(((uint32_t*) ptr)-1))
+# define _rlen(type,args...) (sizeof((type[]){args})/sizeof(type))
+
+# define rosarr(type,args...) ((struct {uint32_t len; type data[_rlen(type,args)];}) {.len=_rlen(type,args), .data={args} }).data
+# define rosarr_n(type,n)     ((struct {uint32_t len; type data[n];}) {.len=n}).data
+# define roslen(ptr)           (ptr==NULL ? 0 : (*(((uint32_t*) ptr)-1)))
 
 #endif
 

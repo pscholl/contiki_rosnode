@@ -43,6 +43,8 @@ import rospy,copy
 
 import os, sys, subprocess, re, argparse
 
+messages, services = {},{}
+
 def type_to_var(ty):
     lookup = {
         1 : 'uint8_t',
@@ -132,7 +134,7 @@ class StringDataType(PrimitiveDataType):
         return 'union { char *%s; uint32_t %s_len; };' % (self.name, self.name)
 
     def serialize(self):
-        return """tmp = strlen(obj->{self.name}); // do not serialize trailing '\0'
+        return """tmp = strlen(obj->{self.name}); // do not serialize trailing '\\0'
   ROS_WRITE32(buf, tmp);
   buf += sizeof(uint32_t);
   memcpy(buf, obj->{self.name}, tmp);
@@ -177,6 +179,12 @@ class ArrayDataType(PrimitiveDataType):
         self.size = array_size
         self.cls = cls
 
+        if self.bytes==8:   self.primitivetype = 'ROS_WRITE64'
+        elif self.bytes==4: self.primitivetype = 'ROS_WRITE32'
+        elif self.bytes==2: self.primitivetype = 'ROS_WRITE16'
+        elif self.bytes==1: self.primitivetype = 'ROS_WRITE8'
+        else: self.primitivetype = None
+
     def make_declaration(self):
         if self.size == None:
             return 'union { %s *%s; uint32_t %s_len; };' % (self.type, self.name, self.name)
@@ -184,15 +192,10 @@ class ArrayDataType(PrimitiveDataType):
             return '%s %s[%d];' % (self.type, self.name, self.size)
 
     def serialize(self):
-        if self.bytes==8:   modifier = 'ROS_WRITE64'
-        elif self.bytes==4: modifier = 'ROS_WRITE32'
-        elif self.bytes==2: modifier = 'ROS_WRITE16'
-        else:               modifier = 'ROS_WRITE8'
-
         # XXX: need to fix that modifier stuff with a call
         # to the underlying datatype serialize method
         if self.size == None:
-            code = """tmp = *(((uint32_t*) obj->{self.name})-1);
+            code = """tmp = *(((uint32_t*) obj->{self.name})-1); // length = prefix of array!
   ROS_WRITE32(buf, tmp);
   buf += sizeof(uint32_t);
 """.format(**locals())
@@ -200,23 +203,33 @@ class ArrayDataType(PrimitiveDataType):
             code = """tmp = {self.size};
 """.format(**locals())
 
-        code += """  for (i=0;i<tmp;i++) {{
-    {modifier}(buf, obj->{self.name}[i]);
+        if self.primitivetype is not None:
+            code += """  for (i=0;i<tmp;i++) {{
+    {self.primitivetype}(buf, obj->{self.name}[i]);
     buf += sizeof(*obj->{self.name});
   }}
+""".format(**locals())
+        else:
+            thistype = self.type[:-2]
+            code += """  for (i=0;i<tmp;i++)
+    buf += {thistype}_serialize(&obj->{self.name}[i],buf,buf-save_ptr);
 """.format(**locals())
 
         return code
 
     def deserialize(self):
-        if self.size == None:
+        if self.size is None:
             return """obj->{self.name}_len = ROS_READ32(buf+var_len+offsetof(typeof(*obj),{self.name}));
   var_len += obj->{self.name}_len * sizeof(*obj->{self.name});
 """.format(**locals())
+        elif self.size is None and self.primitivetype is not None:
+            return """for (i=0; i<{self.size}*sizeof(*obj->{self.name});i++)
+  obj->{self.name}[i] = {self.primitivetype}(buf+i*sizeof(*obj->{self.name}));
+"""
         else:
-            # XXX: wait until test hits this endianess problem!
-            return """memcpy(&obj->{self.name}, buf+var_len+offsetof(typeof(*obj),{self.name}), {self.size}*sizeof(*obj->{self.name}));
-""".format(**locals())
+            print Message.lookup(self.name)
+            return ""
+            #raise Exception("meh")
 
     def deserialize_arrayfixup(self):
         # same here, memmove needs to be replaced with some endianess aware
@@ -228,7 +241,7 @@ class ArrayDataType(PrimitiveDataType):
     obj->{self.name}_len*sizeof(*obj->{self.name}));
   grow_len-=sizeof(uint32_t);
   ROS_WRITE32(buf+sizeof(*obj)+grow_len,obj->{self.name}_len);
-  obj->{self.name}=buf+grow_len+sizeof(*obj)+sizeof(uint32_t);
+  obj->{self.name}=({self.type}*) (buf+grow_len+sizeof(*obj)+sizeof(uint32_t));
 """.format(**locals())
 
 ros_to_c_type = {
@@ -254,9 +267,8 @@ ros_to_c_type = {
 
 #####################################################################
 # Messages
-class Message:    
+class Message:
     """ Parses message definitions into something we can export. """
-
     def __init__(self, name, package, definition, md5):
         self.name = name            # name of message/class
         self.package = package      # package we reside in
@@ -345,7 +357,6 @@ class Message:
 
 typedef struct __attribute__((__packed__)) {self.name} {{
 {msg_body}
-  char _ros_var_memory[0];
 }} {self.name}_t;
 
 {self.name}_t *
@@ -447,41 +458,6 @@ class Service:
         f.write('#ifndef _ROS_SERVICE_%s_h\n' % self.name)
         f.write('#define _ROS_SERVICE_%s_h\n' % self.name)
 
-        #self.req._write_std_includes(f)
-        #includes = self.req.includes
-        #includes.extend(self.resp.includes)
-        #includes = list(set(includes))
-        #for inc in includes:
-        #    f.write('#include "%s.h"\n' % inc)
-        #    
-        #f.write('\n')
-        #f.write('namespace %s\n' % self.package)
-        #f.write('{\n')
-        #f.write('\n')       
-        #f.write('static const char %s[] = "%s/%s";\n'%(self.name.upper(), self.package, self.name))
-        #
-        #def write_type(out, name):
-        #    out.write('    const char * getType(){ return %s; };\n'%(name))
-        #_write_getType = lambda out: write_type(out, self.name.upper())
-        #self.req._write_getType = _write_getType
-        #self.resp._write_getType = _write_getType
-        #
-        #f.write('\n')
-        #self.req._write_impl(f)
-        #f.write('\n')
-        #self.resp._write_impl(f)
-        #f.write('\n')
-        #f.write('  class %s {\n' % self.name )
-        #f.write('    public:\n')
-        #f.write('    typedef %s Request;\n' % self.req.name )
-        #f.write('    typedef %s Response;\n' % self.resp.name )
-        #f.write('  };\n')
-        #f.write('\n')
-
-        #f.write('}\n')
-
-        #f.write('#endif')
-
 #####################################################################
 # Make a Library
 def MakeLibrary(package, output_path):
@@ -492,7 +468,6 @@ def MakeLibrary(package, output_path):
 
     sys.stdout.write('  Messages:')
     # find the messages in this package
-    messages = {}
     if os.path.exists(pkg_dir+"/msg"):
         sys.stdout.write('\n    ')
         for f in os.listdir(pkg_dir+"/msg"):
@@ -508,7 +483,6 @@ def MakeLibrary(package, output_path):
 
     sys.stdout.write('  Services:')
     # find the services in this package
-    services = {}
     if (os.path.exists(pkg_dir+"/srv/")):
         sys.stdout.write('\n    ')
         for f in os.listdir(pkg_dir+"/srv"):
