@@ -1,19 +1,11 @@
  - build test with proper endianess
- - test complex messages
  - add default messages (Header, Time, Duration)
  - write a small tutorial
- - fix grow_len recursively 
  - also check in serialize for buf len! i.e. size_check in *_serialize
  - enums needs some attention
- - string and message in static arrays are problematic!
- - check if non-initialized arrays exist, i.e. NULL pointers in the arrays!
 
 maybe:
  - checkout 64bit compatibility (it's not there, let's see if we can do anyhow
    by modifying the grow_len)
  - replace dfs strategy of deserialize with bfs to avoid multiple counter vars
  - reorder struct declaration to ensure aligned access
-
-
-done:
- - emtpy arrays?
