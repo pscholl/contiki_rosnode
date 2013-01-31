@@ -37,8 +37,19 @@
 # define _rlen(type,args...) (sizeof((type[]){args})/sizeof(type))
 
 # define rosarr(type,args...) ((struct {uint32_t len; type data[_rlen(type,args)];}) {.len=_rlen(type,args), .data={args} }).data
-# define rosarr_n(type,n)     ((struct {uint32_t len; type data[n];}) {.len=n}).data
+# define rosarr_n(type,n)     ((struct {uint32_t len; type data[n];}) {.len=n}).data /* XXX: needs fixing */
 # define roslen(ptr)           (ptr==NULL ? 0 : (*(((uint32_t*) ptr)-1)))
+
+/* XXX: catch endianess from compiler */
+# define ROS_READ64(ptr) (ptr)
+# define ROS_READ32(ptr) (*(uint32_t*) (ptr))
+# define ROS_READ16(ptr) (*(uint16_t*) (ptr))
+# define ROS_READ8(ptr)  (*(uint8_t*) (ptr))
+
+# define ROS_WRITE64(buf,x) (buf)
+# define ROS_WRITE32(buf,x) (*(uint32_t*) (buf)=x)
+# define ROS_WRITE16(buf,x) (*(uint16_t*) (buf)=x)
+# define ROS_WRITE8(buf,x)  (*(uint8_t*)  (buf)=x)
 
 #endif
 

@@ -9,11 +9,12 @@
   <review status="unreviewed" notes=""/>
   <url>http://ros.org/wiki/contiki-rosnode</url>
 
-  <depend package="contiki"/>
+  <!--depend package="contiki"/-->
   <depend package="rosserial_msgs"/>
   <depend package="std_msgs"/>
-  <depend package="challenge_msgs"/>
+  <!--depend package="challenge_msgs"/-->
 
 </package>
+
 
 
