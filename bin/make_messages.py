@@ -531,7 +531,7 @@ class Message(object):
                     value = '"' + line[line.find("=")+1:] + '"';
                 line = line[0:line.find("=")]
 
-            # find package/class name   
+            # find package/class name
             line = line.replace("\t", " ")
             l = line.split(" ")
             while "" in l:

@@ -15,6 +15,7 @@ typedef struct __attribute__((__packed__)) TopicInfo {
   char *message_type;
   char *md5sum;
   int32_t buffer_size;
+
 } TopicInfo_t;
 
 

@@ -9,7 +9,7 @@
 #define Time_md5 ("cd7166c74c552c311fbcc2fe5a7bc289")
 #define Time_rostype ("std_msgs/Time")
 
-typedef struct __attribute__((__packed__)) Time{
+typedef struct __attribute__((__packed__)) Time {
   Time_t data;
 
 } Time_t;
