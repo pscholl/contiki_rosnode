@@ -9,7 +9,7 @@
 #define MultiArrayDimension_md5 ("4cd0c83a8683deae40ecdac60e53bfa8")
 #define MultiArrayDimension_rostype ("std_msgs/MultiArrayDimension")
 
-typedef struct __attribute__((__packed__)) MultiArrayDimension {
+typedef struct MultiArrayDimension {
   char *label;
   uint32_t size;
   uint32_t stride;

@@ -10,7 +10,7 @@
 #define UInt32MultiArray_md5 ("4d6a180abc9be191b96a7eda6c8a233d")
 #define UInt32MultiArray_rostype ("std_msgs/UInt32MultiArray")
 
-typedef struct __attribute__((__packed__)) UInt32MultiArray {
+typedef struct UInt32MultiArray {
   MultiArrayLayout_t layout;
   uint32_t *data;
 

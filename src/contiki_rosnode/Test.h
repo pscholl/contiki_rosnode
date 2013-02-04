@@ -9,7 +9,7 @@
 #define Test_md5 ("87c6715226f6ac2cf369418c10409ae0")
 #define Test_rostype ("contiki_rosnode/Test")
 
-typedef struct __attribute__((__packed__)) Test {
+typedef struct Test {
   char *from_node;
   char *to_node;
   uint8_t quality[8];

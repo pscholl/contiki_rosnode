@@ -9,7 +9,7 @@
 #define String_md5 ("992ce8a1687cec8c8bd883ec73ca41d1")
 #define String_rostype ("std_msgs/String")
 
-typedef struct __attribute__((__packed__)) String {
+typedef struct String {
   char *data;
 
 } String_t;

@@ -10,7 +10,7 @@
 #define ByteMultiArray_md5 ("70ea476cbcfd65ac2f68f3cda1e891fe")
 #define ByteMultiArray_rostype ("std_msgs/ByteMultiArray")
 
-typedef struct __attribute__((__packed__)) ByteMultiArray {
+typedef struct ByteMultiArray {
   MultiArrayLayout_t layout;
   int8_t *data;
 

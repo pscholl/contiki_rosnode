@@ -10,7 +10,7 @@
 #define Float32MultiArray_md5 ("6a40e0ffa6a17a503ac3f8616991b1f6")
 #define Float32MultiArray_rostype ("std_msgs/Float32MultiArray")
 
-typedef struct __attribute__((__packed__)) Float32MultiArray {
+typedef struct Float32MultiArray {
   MultiArrayLayout_t layout;
   float *data;
 

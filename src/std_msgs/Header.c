@@ -31,7 +31,8 @@ Header_deserialize_size(char *buf, char *to, size_t *n)
     return NULL; // check if header fits
 
   obj->seq = ROS_READ32(buf); buf+=4;
-  obj->stamp = ROS_READ64(buf); buf+=8;
+    obj->stamp.secs = ROS_READ32(buf); buf+=4;
+    obj->stamp.nanosecs = ROS_READ32(buf); buf+=4;
   obj->frame_id = buf;
   buf += ROS_READ32(buf) + sizeof(uint32_t);
   grow_len += 1;
@@ -56,7 +57,8 @@ Header_deserialize_size(char *buf, char *to, size_t *n)
   memmove(var_ptr,buf,tmp);
   obj->frame_id = (char*) (var_ptr);
   buf -= sizeof(uint32_t);
-  buf -= sizeof(Time_t);
+    buf -= sizeof(int32_t);
+    buf -= sizeof(int32_t);
   buf -= sizeof(uint32_t);
 
 
@@ -77,7 +79,7 @@ Header_serialize(Header_t *obj, char *buf, size_t n)
   size_t i=0;
 
   ROS_WRITE32(buf,obj->seq); buf+=4;
-  ROS_WRITE64(buf,obj->stamp); buf+=8;
+  buf += time_serialize(&obj->stamp,buf,buf-save_ptr);
   tmp = obj->frame_id==NULL ? 0 : strlen(obj->frame_id);
   ROS_WRITE32(buf, tmp); buf+=4;
   memcpy(buf, obj->frame_id, tmp);

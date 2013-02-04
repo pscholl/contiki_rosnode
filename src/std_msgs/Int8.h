@@ -9,7 +9,7 @@
 #define Int8_md5 ("27ffa0c9c4b8fb8492252bcad9e5c57b")
 #define Int8_rostype ("std_msgs/Int8")
 
-typedef struct __attribute__((__packed__)) Int8 {
+typedef struct Int8 {
   int8_t data;
 
 } Int8_t;

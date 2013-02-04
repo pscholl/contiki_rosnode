@@ -9,7 +9,7 @@
 #define TopicInfo_md5 ("63aa5e8f1bdd6f35c69fe1a1b9d28e9f")
 #define TopicInfo_rostype ("rosserial_msgs/TopicInfo")
 
-typedef struct __attribute__((__packed__)) TopicInfo {
+typedef struct TopicInfo {
   uint16_t topic_id;
   char *topic_name;
   char *message_type;

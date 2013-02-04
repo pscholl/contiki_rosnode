@@ -10,7 +10,7 @@
 #define UInt16MultiArray_md5 ("52f264f1c973c4b73790d384c6cb4484")
 #define UInt16MultiArray_rostype ("std_msgs/UInt16MultiArray")
 
-typedef struct __attribute__((__packed__)) UInt16MultiArray {
+typedef struct UInt16MultiArray {
   MultiArrayLayout_t layout;
   uint16_t *data;
 

@@ -9,7 +9,7 @@
 #define UInt8_md5 ("7c8164229e7d2c17eb95e9231617fdee")
 #define UInt8_rostype ("std_msgs/UInt8")
 
-typedef struct __attribute__((__packed__)) UInt8 {
+typedef struct UInt8 {
   uint8_t data;
 
 } UInt8_t;

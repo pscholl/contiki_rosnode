@@ -9,7 +9,7 @@
 #define UInt64_md5 ("1b2a79973e8bf53d7b53acb71299cb57")
 #define UInt64_rostype ("std_msgs/UInt64")
 
-typedef struct __attribute__((__packed__)) UInt64 {
+typedef struct UInt64 {
   uint64_t data;
 
 } UInt64_t;

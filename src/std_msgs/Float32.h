@@ -9,7 +9,7 @@
 #define Float32_md5 ("73fcbf46b49191e672908e50842a83d4")
 #define Float32_rostype ("std_msgs/Float32")
 
-typedef struct __attribute__((__packed__)) Float32 {
+typedef struct Float32 {
   float data;
 
 } Float32_t;

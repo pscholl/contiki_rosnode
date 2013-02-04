@@ -10,7 +10,7 @@
 #define Int16MultiArray_md5 ("d9338d7f523fcb692fae9d0a0e9f067c")
 #define Int16MultiArray_rostype ("std_msgs/Int16MultiArray")
 
-typedef struct __attribute__((__packed__)) Int16MultiArray {
+typedef struct Int16MultiArray {
   MultiArrayLayout_t layout;
   int16_t *data;
 

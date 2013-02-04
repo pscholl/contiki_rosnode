@@ -9,7 +9,7 @@
 #define Log_md5 ("7170d5aec999754ba0d9f762bf49b913")
 #define Log_rostype ("rosserial_msgs/Log")
 
-typedef struct __attribute__((__packed__)) Log {
+typedef struct Log {
   uint8_t level;
   char *msg;
 

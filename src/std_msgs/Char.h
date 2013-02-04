@@ -9,7 +9,7 @@
 #define Char_md5 ("1bf77f25acecdedba0e224b162199717")
 #define Char_rostype ("std_msgs/Char")
 
-typedef struct __attribute__((__packed__)) Char {
+typedef struct Char {
   uint8_t data;
 
 } Char_t;

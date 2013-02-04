@@ -112,7 +112,7 @@ class Visitor(object):
         self.stack.append(msg)
 
         for d in Message.__messages__[msg.type[:-2]].data:
-            if d.__class__ == MessageDataType:
+            if isinstance(d, MessageDataType):
                 self.dfs(d)
             else:
                 self.visit(d)
@@ -133,7 +133,7 @@ class Visitor(object):
         self.stack.append(msg)
 
         for d in reversed(Message.__messages__[msg.type[:-2]].data):
-            if d.__class__==MessageDataType: self.rdfs(d)
+            if isinstance(d, MessageDataType): self.rdfs(d)
             else: self.visit(d)
 
         self.stack = self.stack[:-1]
@@ -179,13 +179,6 @@ class Float64DataType(PrimitiveDataType): pass
 
 class StringDataType(PrimitiveDataType): pass
 
-class TimeDataType(PrimitiveDataType):
-    def __init__(self, name, ty, bytes):
-        self.sec = PrimitiveDataType(name+'.sec','uint32_t',4)
-        self.nsec = PrimitiveDataType(name+'.nsec','uint32_t',4)
-        self.bytes = self.sec.bytes + self.nsec.bytes
-        PrimitiveDataType.__init__(self,name,ty,self.bytes)
-
 class StaticArray(PrimitiveDataType):
     def __init__(self, name, ty, bytes, cls, size):
         PrimitiveDataType.__init__(self, name, ty, bytes)
@@ -212,12 +205,8 @@ ros_to_c_type = {
     'uint64'  :   ('uint64_t',          4, PrimitiveDataType, []),
     'float32' :   ('float',             4, PrimitiveDataType, []),
     'float64' :   ('float',             4, Float64DataType, []),
-#    'time'    :   ('Time_t',            8, TimeDataType, ['time']),
-#    'duration':   ('Duration_t',        8, TimeDataType, ['duration']),
-    'time'    :   ('Time_t',            8, TimeDataType, []),
-    'duration':   ('Duration_t',        8, TimeDataType, []),
     'string'  :   ('char*',             0, StringDataType, []),
-    'Header'  :   ('Header_t',          0, MessageDataType, ['std_msgs/Header'])
+#    'Header'  :   ('Header_t',          0, MessageDataType, ['std_msgs/Header'])
 }
 
 class PrettyPrinter(Visitor):
@@ -516,6 +505,11 @@ class Message(object):
 
         with open(file) as file:
             lines = file.readlines()
+
+        if ("Time" in self.name and "std_msgs" in str(self.package)) or\
+           ("Duration" in self.name and "std_msgs" in str(self.package)):
+            lines = "int32 secs\nint32 nanosecs".split('\n')
+            Message.__messages__[self.name.lower()] = self
 
         # parse definition
         for line in lines:

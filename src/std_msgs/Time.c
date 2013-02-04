@@ -30,7 +30,8 @@ Time_deserialize_size(char *buf, char *to, size_t *n)
   if (*n < sizeof(*obj))
     return NULL; // check if header fits
 
-  obj->data = ROS_READ64(buf); buf+=8;
+  obj->secs = ROS_READ32(buf); buf+=4;
+  obj->nanosecs = ROS_READ32(buf); buf+=4;
 
 
   // we grow the number of bytes we need beyond what is actually needed
@@ -44,7 +45,8 @@ Time_deserialize_size(char *buf, char *to, size_t *n)
   if (to==NULL) var_ptr = buf + grow_len;
   else          var_ptr = to;
 
-  buf -= sizeof(Time_t);
+  buf -= sizeof(int32_t);
+  buf -= sizeof(int32_t);
 
 
   if (to!=NULL)
@@ -63,7 +65,8 @@ Time_serialize(Time_t *obj, char *buf, size_t n)
   uint32_t tmp=0;
   size_t i=0;
 
-  ROS_WRITE64(buf,obj->data); buf+=8;
+  ROS_WRITE32(buf,obj->secs); buf+=4;
+  ROS_WRITE32(buf,obj->nanosecs); buf+=4;
 
 
   return buf-save_ptr;

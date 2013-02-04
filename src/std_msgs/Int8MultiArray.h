@@ -10,7 +10,7 @@
 #define Int8MultiArray_md5 ("d7c1af35a1b4781bbe79e03dd94b7c13")
 #define Int8MultiArray_rostype ("std_msgs/Int8MultiArray")
 
-typedef struct __attribute__((__packed__)) Int8MultiArray {
+typedef struct Int8MultiArray {
   MultiArrayLayout_t layout;
   int8_t *data;
 

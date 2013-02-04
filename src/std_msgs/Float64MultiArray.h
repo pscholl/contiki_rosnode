@@ -10,7 +10,7 @@
 #define Float64MultiArray_md5 ("4b7d974086d4060e7db4613a7e6c3ba4")
 #define Float64MultiArray_rostype ("std_msgs/Float64MultiArray")
 
-typedef struct __attribute__((__packed__)) Float64MultiArray {
+typedef struct Float64MultiArray {
   MultiArrayLayout_t layout;
   float *data;
 

@@ -4,14 +4,15 @@
 #include <stdint.h>
 #include <stdbool.h>
 #include <string.h>
+#include <std_msgs/Time.h>
 
 
 #define Header_md5 ("2176decaecbce78abc3b96ef049fabed")
 #define Header_rostype ("std_msgs/Header")
 
-typedef struct __attribute__((__packed__)) Header {
+typedef struct Header {
   uint32_t seq;
-  Time_t stamp;
+  time_t stamp;
   char *frame_id;
 
 } Header_t;

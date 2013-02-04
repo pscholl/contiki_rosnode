@@ -9,7 +9,7 @@
 #define Byte_md5 ("ad736a2e8818154c487bb80fe42ce43b")
 #define Byte_rostype ("std_msgs/Byte")
 
-typedef struct __attribute__((__packed__)) Byte {
+typedef struct Byte {
   int8_t data;
 
 } Byte_t;
