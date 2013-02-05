@@ -16,6 +16,12 @@ typedef struct MultiArrayLayout {
 
 } MultiArrayLayout_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct MultiArrayLayout_packed {
+  MultiArrayDimension_t **dim;
+  uint32_t data_offset;
+
+} __attribute__((__packed__)) MultiArrayLayout_t_packed;
 
 MultiArrayLayout_t *
 MultiArrayLayout_deserialize_size(char *buf, char *to, size_t *n);

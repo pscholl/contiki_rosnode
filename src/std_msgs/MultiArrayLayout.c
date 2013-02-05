@@ -38,6 +38,7 @@ MultiArrayLayout_deserialize_size(char *buf, char *to, size_t *n)
   *((uint32_t*)obj->dim) = tmp;
   obj->dim = (MultiArrayDimension_t**) (((uint32_t*) obj->dim) + 1);
   for (size_t i=0; i<tmp; i++) {
+    grow_len += sizeof(MultiArrayDimension_t) - sizeof(MultiArrayDimension_t_packed);
     obj->dim[i] = (MultiArrayDimension_t*)buf;
     grow_len += sizeof(MultiArrayDimension_t*); // allocate storage space
     buf += ROS_READ32(buf) + sizeof(uint32_t);
@@ -56,7 +57,7 @@ MultiArrayLayout_deserialize_size(char *buf, char *to, size_t *n)
       return NULL; // check if arrays+strings fit
   *n = (buf-save_ptr)+grow_len;
 
-  if (to==NULL) var_ptr = buf + grow_len;
+  if (to==NULL) var_ptr = buf + grow_len + (sizeof(MultiArrayLayout_t)-sizeof(MultiArrayLayout_t_packed));
   else          var_ptr = to;
 
   buf -= sizeof(uint32_t);

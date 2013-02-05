@@ -14,6 +14,11 @@ typedef struct Float64 {
 
 } Float64_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Float64_packed {
+  float data;
+
+} __attribute__((__packed__)) Float64_t_packed;
 
 Float64_t *
 Float64_deserialize_size(char *buf, char *to, size_t *n);

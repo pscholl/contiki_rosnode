@@ -14,6 +14,11 @@ typedef struct Char {
 
 } Char_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Char_packed {
+  uint8_t data;
+
+} __attribute__((__packed__)) Char_t_packed;
 
 Char_t *
 Char_deserialize_size(char *buf, char *to, size_t *n);

@@ -17,6 +17,13 @@ typedef struct Header {
 
 } Header_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Header_packed {
+  uint32_t seq;
+  time_t stamp;
+  char *frame_id;
+
+} __attribute__((__packed__)) Header_t_packed;
 
 Header_t *
 Header_deserialize_size(char *buf, char *to, size_t *n);

@@ -17,6 +17,14 @@ typedef struct ColorRGBA {
 
 } ColorRGBA_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct ColorRGBA_packed {
+  float r;
+  float g;
+  float b;
+  float a;
+
+} __attribute__((__packed__)) ColorRGBA_t_packed;
 
 ColorRGBA_t *
 ColorRGBA_deserialize_size(char *buf, char *to, size_t *n);

@@ -13,6 +13,10 @@ typedef struct Empty {
 
 } Empty_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Empty_packed {
+
+} __attribute__((__packed__)) Empty_t_packed;
 
 Empty_t *
 Empty_deserialize_size(char *buf, char *to, size_t *n);

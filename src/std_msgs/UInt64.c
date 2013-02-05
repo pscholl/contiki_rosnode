@@ -41,7 +41,7 @@ UInt64_deserialize_size(char *buf, char *to, size_t *n)
       return NULL; // check if arrays+strings fit
   *n = (buf-save_ptr)+grow_len;
 
-  if (to==NULL) var_ptr = buf + grow_len;
+  if (to==NULL) var_ptr = buf + grow_len + (sizeof(UInt64_t)-sizeof(UInt64_t_packed));
   else          var_ptr = to;
 
   buf -= sizeof(uint64_t);

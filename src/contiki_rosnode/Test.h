@@ -22,6 +22,19 @@ typedef struct Test {
 
 } Test_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Test_packed {
+  char *from_node;
+  char *to_node;
+  uint8_t quality[8];
+  uint32_t a;
+  uint32_t b;
+  uint16_t c;
+  uint8_t d;
+  int16_t *i16arr;
+  int32_t x;
+
+} __attribute__((__packed__)) Test_t_packed;
 
 Test_t *
 Test_deserialize_size(char *buf, char *to, size_t *n);

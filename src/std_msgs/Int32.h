@@ -14,6 +14,11 @@ typedef struct Int32 {
 
 } Int32_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Int32_packed {
+  int32_t data;
+
+} __attribute__((__packed__)) Int32_t_packed;
 
 Int32_t *
 Int32_deserialize_size(char *buf, char *to, size_t *n);

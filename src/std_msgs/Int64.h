@@ -14,6 +14,11 @@ typedef struct Int64 {
 
 } Int64_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Int64_packed {
+  int64_t data;
+
+} __attribute__((__packed__)) Int64_t_packed;
 
 Int64_t *
 Int64_deserialize_size(char *buf, char *to, size_t *n);

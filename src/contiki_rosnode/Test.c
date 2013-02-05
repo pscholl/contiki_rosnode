@@ -61,7 +61,7 @@ Test_deserialize_size(char *buf, char *to, size_t *n)
       return NULL; // check if arrays+strings fit
   *n = (buf-save_ptr)+grow_len;
 
-  if (to==NULL) var_ptr = buf + grow_len;
+  if (to==NULL) var_ptr = buf + grow_len + (sizeof(Test_t)-sizeof(Test_t_packed));
   else          var_ptr = to;
 
   buf -= sizeof(int32_t);

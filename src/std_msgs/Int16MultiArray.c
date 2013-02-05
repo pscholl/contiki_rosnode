@@ -38,6 +38,7 @@ Int16MultiArray_deserialize_size(char *buf, char *to, size_t *n)
     *((uint32_t*)obj->layout.dim) = tmp;
     obj->layout.dim = (MultiArrayDimension_t**) (((uint32_t*) obj->layout.dim) + 1);
     for (size_t j=0; j<tmp; j++) {
+      grow_len += sizeof(MultiArrayDimension_t) - sizeof(MultiArrayDimension_t_packed);
       obj->layout.dim[j] = (MultiArrayDimension_t*)buf;
       grow_len += sizeof(MultiArrayDimension_t*); // allocate storage space
       buf += ROS_READ32(buf) + sizeof(uint32_t);
@@ -63,7 +64,7 @@ Int16MultiArray_deserialize_size(char *buf, char *to, size_t *n)
       return NULL; // check if arrays+strings fit
   *n = (buf-save_ptr)+grow_len;
 
-  if (to==NULL) var_ptr = buf + grow_len;
+  if (to==NULL) var_ptr = buf + grow_len + (sizeof(Int16MultiArray_t)-sizeof(Int16MultiArray_t_packed));
   else          var_ptr = to;
 
   for (size_t i=roslen(obj->data); i-->0;) {

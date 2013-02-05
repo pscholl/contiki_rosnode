@@ -237,6 +237,13 @@ class Declaration(Visitor):
         else:
             self.writeln(node, "{node.type} *{node.name};")
 
+class DeclarationPacked(Declaration):
+    def visit_StaticArray(self,node):
+        if node.cls == MessageDataType:
+            self.writeln(node, "{node.type}_packed {node.name}[{node.size}];")
+        else:
+            Declaration.visit_StaticArray(self,node)
+
 class Includes(Visitor):
     def __init__(self,out=sys.stdout):
         Visitor.__init__(self,out)
@@ -376,6 +383,7 @@ class Deserialize(Visitor):
         elif node.cls == StringDataType:
             self.visit_StringDataType(node)
         elif node.cls == MessageDataType:
+            self.writeln(node,"grow_len += sizeof({node.type}) - sizeof({node.type}_packed);")
             self.writeln(node,"obj->{node.indirection}[{self.counter_var}] = ({node.type}*)buf;")
             self.writeln(node,"grow_len += sizeof({node.type}*); // allocate storage space")
             DynamicArrayMessageRecurse(self.out,self.indent,self.counter_var).dfs(node)
@@ -577,6 +585,7 @@ class Message(object):
     def make_header(self, out=sys.stdout):
         includes = Includes(out=StringIO()).onlyattr(self).out.getvalue()
         declaration = Declaration(out=StringIO()).onlyattr(self).out.getvalue()
+        declaration_packed = DeclarationPacked(out=StringIO()).onlyattr(self).out.getvalue()
         package,name = str(self.package).upper(),self.name.upper()
 
         out.write("""#ifndef _ROS_{package}_{name}_H_
@@ -590,10 +599,14 @@ class Message(object):
 #define {self.name}_md5 ("{self.md5}")
 #define {self.name}_rostype ("{self.package}/{self.name}")
 
-typedef struct __attribute__((__packed__)) {self.name} {{
+typedef struct {self.name} {{
 {declaration}
 }} {self.name}_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct {self.name}_packed {{
+{declaration_packed}
+}} __attribute__((__packed__)) {self.name}_t_packed;
 
 {self.name}_t *
 {self.name}_deserialize_size(char *buf, char *to, size_t *n);
@@ -655,7 +668,7 @@ size_t
       return NULL; // check if arrays+strings fit
   *n = (buf-save_ptr)+grow_len;
 
-  if (to==NULL) var_ptr = buf + grow_len;
+  if (to==NULL) var_ptr = buf + grow_len + (sizeof({self.name}_t)-sizeof({self.name}_t_packed));
   else          var_ptr = to;
 
 {deserialize_array}

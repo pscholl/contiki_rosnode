@@ -15,6 +15,12 @@ typedef struct Duration {
 
 } Duration_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Duration_packed {
+  int32_t secs;
+  int32_t nanosecs;
+
+} __attribute__((__packed__)) Duration_t_packed;
 
 Duration_t *
 Duration_deserialize_size(char *buf, char *to, size_t *n);

@@ -16,6 +16,12 @@ typedef struct UInt8MultiArray {
 
 } UInt8MultiArray_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct UInt8MultiArray_packed {
+  MultiArrayLayout_t layout;
+  uint8_t *data;
+
+} __attribute__((__packed__)) UInt8MultiArray_t_packed;
 
 UInt8MultiArray_t *
 UInt8MultiArray_deserialize_size(char *buf, char *to, size_t *n);

@@ -46,7 +46,7 @@ Header_deserialize_size(char *buf, char *to, size_t *n)
       return NULL; // check if arrays+strings fit
   *n = (buf-save_ptr)+grow_len;
 
-  if (to==NULL) var_ptr = buf + grow_len;
+  if (to==NULL) var_ptr = buf + grow_len + (sizeof(Header_t)-sizeof(Header_t_packed));
   else          var_ptr = to;
 
   tmp = ROS_READ32(obj->frame_id);

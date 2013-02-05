@@ -62,6 +62,7 @@ TestComplex_deserialize_size(char *buf, char *to, size_t *n)
   *((uint32_t*)obj->test_dynamic) = tmp;
   obj->test_dynamic = (Test_t**) (((uint32_t*) obj->test_dynamic) + 1);
   for (size_t i=0; i<tmp; i++) {
+    grow_len += sizeof(Test_t) - sizeof(Test_t_packed);
     obj->test_dynamic[i] = (Test_t*)buf;
     grow_len += sizeof(Test_t*); // allocate storage space
     buf += ROS_READ32(buf) + sizeof(uint32_t);
@@ -108,7 +109,7 @@ TestComplex_deserialize_size(char *buf, char *to, size_t *n)
       return NULL; // check if arrays+strings fit
   *n = (buf-save_ptr)+grow_len;
 
-  if (to==NULL) var_ptr = buf + grow_len;
+  if (to==NULL) var_ptr = buf + grow_len + (sizeof(TestComplex_t)-sizeof(TestComplex_t_packed));
   else          var_ptr = to;
 
   for (size_t i=roslen(obj->dStrings); i-->0;) {

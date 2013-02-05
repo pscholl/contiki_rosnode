@@ -16,6 +16,12 @@ typedef struct Int64MultiArray {
 
 } Int64MultiArray_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Int64MultiArray_packed {
+  MultiArrayLayout_t layout;
+  int64_t *data;
+
+} __attribute__((__packed__)) Int64MultiArray_t_packed;
 
 Int64MultiArray_t *
 Int64MultiArray_deserialize_size(char *buf, char *to, size_t *n);

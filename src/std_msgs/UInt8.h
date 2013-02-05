@@ -14,6 +14,11 @@ typedef struct UInt8 {
 
 } UInt8_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct UInt8_packed {
+  uint8_t data;
+
+} __attribute__((__packed__)) UInt8_t_packed;
 
 UInt8_t *
 UInt8_deserialize_size(char *buf, char *to, size_t *n);

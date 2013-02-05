@@ -16,6 +16,13 @@ typedef struct MultiArrayDimension {
 
 } MultiArrayDimension_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct MultiArrayDimension_packed {
+  char *label;
+  uint32_t size;
+  uint32_t stride;
+
+} __attribute__((__packed__)) MultiArrayDimension_t_packed;
 
 MultiArrayDimension_t *
 MultiArrayDimension_deserialize_size(char *buf, char *to, size_t *n);

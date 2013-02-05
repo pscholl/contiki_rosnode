@@ -21,6 +21,17 @@ typedef struct TestComplex {
 
 } TestComplex_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct TestComplex_packed {
+  int8_t some_number;
+  Test_t_packed test_static[2];
+  Test_t **test_dynamic;
+  int8_t another_number;
+  char *aString;
+  char* sStrings[2];
+  char* *dStrings;
+
+} __attribute__((__packed__)) TestComplex_t_packed;
 
 TestComplex_t *
 TestComplex_deserialize_size(char *buf, char *to, size_t *n);

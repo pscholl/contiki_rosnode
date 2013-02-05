@@ -18,6 +18,15 @@ typedef struct TopicInfo {
 
 } TopicInfo_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct TopicInfo_packed {
+  uint16_t topic_id;
+  char *topic_name;
+  char *message_type;
+  char *md5sum;
+  int32_t buffer_size;
+
+} __attribute__((__packed__)) TopicInfo_t_packed;
 
 TopicInfo_t *
 TopicInfo_deserialize_size(char *buf, char *to, size_t *n);

@@ -16,6 +16,12 @@ typedef struct UInt32MultiArray {
 
 } UInt32MultiArray_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct UInt32MultiArray_packed {
+  MultiArrayLayout_t layout;
+  uint32_t *data;
+
+} __attribute__((__packed__)) UInt32MultiArray_t_packed;
 
 UInt32MultiArray_t *
 UInt32MultiArray_deserialize_size(char *buf, char *to, size_t *n);

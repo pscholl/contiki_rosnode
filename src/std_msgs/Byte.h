@@ -14,6 +14,11 @@ typedef struct Byte {
 
 } Byte_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Byte_packed {
+  int8_t data;
+
+} __attribute__((__packed__)) Byte_t_packed;
 
 Byte_t *
 Byte_deserialize_size(char *buf, char *to, size_t *n);

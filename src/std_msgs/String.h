@@ -14,6 +14,11 @@ typedef struct String {
 
 } String_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct String_packed {
+  char *data;
+
+} __attribute__((__packed__)) String_t_packed;
 
 String_t *
 String_deserialize_size(char *buf, char *to, size_t *n);

@@ -14,6 +14,11 @@ typedef struct Int8 {
 
 } Int8_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Int8_packed {
+  int8_t data;
+
+} __attribute__((__packed__)) Int8_t_packed;
 
 Int8_t *
 Int8_deserialize_size(char *buf, char *to, size_t *n);

@@ -15,6 +15,12 @@ typedef struct Log {
 
 } Log_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct Log_packed {
+  uint8_t level;
+  char *msg;
+
+} __attribute__((__packed__)) Log_t_packed;
 
 Log_t *
 Log_deserialize_size(char *buf, char *to, size_t *n);

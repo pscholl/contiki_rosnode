@@ -16,6 +16,12 @@ typedef struct ByteMultiArray {
 
 } ByteMultiArray_t;
 
+/* the packed declaration to calculate the proper offset later on */
+typedef struct ByteMultiArray_packed {
+  MultiArrayLayout_t layout;
+  int8_t *data;
+
+} __attribute__((__packed__)) ByteMultiArray_t_packed;
 
 ByteMultiArray_t *
 ByteMultiArray_deserialize_size(char *buf, char *to, size_t *n);
