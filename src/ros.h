@@ -40,16 +40,34 @@
 # define rosarr_n(type,n)     ((struct {uint32_t len; type data[n];}) {.len=n}).data /* XXX: needs fixing */
 # define roslen(ptr)           (ptr==NULL ? 0 : (*(((uint32_t*) ptr)-1)))
 
-/* XXX: catch endianess from compiler */
-# define ROS_READ64(ptr) (ptr)
-# define ROS_READ32(ptr) (*(uint32_t*) (ptr))
-# define ROS_READ16(ptr) (*(uint16_t*) (ptr))
-# define ROS_READ8(ptr)  (*(uint8_t*) (ptr))
+/* it seems there is no fixed endianess of ROS message, so for now we assume
+ * that data needs is transmitted in non-network-byte word (i.e. little endian
+ */
 
-# define ROS_WRITE64(buf,x) (buf)
-# define ROS_WRITE32(buf,x) (*(uint32_t*) (buf)=x)
-# define ROS_WRITE16(buf,x) (*(uint16_t*) (buf)=x)
-# define ROS_WRITE8(buf,x)  (*(uint8_t*)  (buf)=x)
+# if  __BYTE_ORDER__ == __ORDER_LITTLE_ENDIAN__
+#   define ROS_READ64(ptr) (ptr)
+#   define ROS_READ32(ptr) (*(uint32_t*) (ptr))
+#   define ROS_READ16(ptr) (*(uint16_t*) (ptr))
+#   define ROS_READ8(ptr)  (*(uint8_t*) (ptr))
 
+#   define ROS_WRITE64(buf,x) (buf)
+#   define ROS_WRITE32(buf,x) (*(uint32_t*) (buf)=x)
+#   define ROS_WRITE16(buf,x) (*(uint16_t*) (buf)=x)
+#   define ROS_WRITE8(buf,x)  (*(uint8_t*)  (buf)=x)
+# else
+#  define ROS_HTONS(n)  (uint16_t)((((uint16_t) (n)) << 8) | (((uint16_t) (n)) >> 8))
+#  define ROS_HTONL(n)  (((uint32_t)ROS_HTONS(n) << 16) | ROS_HTONS((uint32_t)(n) >> 16))
+#  define ROS_HTONLL(n) (((uint64_t)ROS_HTONL(n) << 32) | ROS_HTONL((uint64_t)(n) >> 32))
+
+#  define ROS_READ64(ptr) (ROS_HTONLL(*(uint64_t*) (ptr)))
+#  define ROS_READ32(ptr) (ROS_HTONL(*(uint32_t*) (ptr)))
+#  define ROS_READ16(ptr) (ROS_HTONS(*(uint16_t*) (ptr)))
+#  define ROS_READ8(ptr)  (*(uint8_t*) (ptr))
+
+#  define ROS_WRITE64(buf,x) (*(uint64_t*) (buf)=ROS_HTONLL(x))
+#  define ROS_WRITE32(buf,x) (*(uint32_t*) (buf)=ROS_HTONL(x))
+#  define ROS_WRITE16(buf,x) (*(uint32_t*) (buf)=ROS_HTONS(x))
+#  define ROS_WRITE8(buf,x)  (*(uint8_t*)  (buf)=x)
+# endif
 #endif
 
