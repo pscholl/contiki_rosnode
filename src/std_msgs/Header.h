@@ -10,6 +10,8 @@
 #define Header_md5 ("2176decaecbce78abc3b96ef049fabed")
 #define Header_rostype ("std_msgs/Header")
 
+
+
 typedef struct Header {
   uint32_t seq;
   time_t stamp;

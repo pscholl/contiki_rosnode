@@ -9,6 +9,8 @@
 #define Time_md5 ("cd7166c74c552c311fbcc2fe5a7bc289")
 #define Time_rostype ("std_msgs/Time")
 
+
+
 typedef struct Time {
   int32_t secs;
   int32_t nanosecs;

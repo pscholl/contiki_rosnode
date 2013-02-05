@@ -9,6 +9,8 @@
 #define Bool_md5 ("8b94c1b53db61fb6aed406028ad6332a")
 #define Bool_rostype ("std_msgs/Bool")
 
+
+
 typedef struct Bool {
   bool data;
 

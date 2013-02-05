@@ -10,6 +10,8 @@
 #define TestComplex_md5 ("ac366b76ffe0cd23d789ef457600b38f")
 #define TestComplex_rostype ("contiki_rosnode/TestComplex")
 
+
+
 typedef struct TestComplex {
   int8_t some_number;
   Test_t test_static[2];

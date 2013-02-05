@@ -9,6 +9,8 @@
 #define Duration_md5 ("3e286caf4241d664e55f3ad380e2ae46")
 #define Duration_rostype ("std_msgs/Duration")
 
+
+
 typedef struct Duration {
   int32_t secs;
   int32_t nanosecs;

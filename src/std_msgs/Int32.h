@@ -9,6 +9,8 @@
 #define Int32_md5 ("da5909fbe378aeaf85e547e830cc1bb7")
 #define Int32_rostype ("std_msgs/Int32")
 
+
+
 typedef struct Int32 {
   int32_t data;
 

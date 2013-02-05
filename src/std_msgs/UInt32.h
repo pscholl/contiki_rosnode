@@ -9,6 +9,8 @@
 #define UInt32_md5 ("304a39449588c7f8ce2df6e8001c5fce")
 #define UInt32_rostype ("std_msgs/UInt32")
 
+
+
 typedef struct UInt32 {
   uint32_t data;
 

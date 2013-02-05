@@ -9,6 +9,8 @@
 #define Empty_md5 ("d41d8cd98f00b204e9800998ecf8427e")
 #define Empty_rostype ("std_msgs/Empty")
 
+
+
 typedef struct Empty {
 
 } Empty_t;

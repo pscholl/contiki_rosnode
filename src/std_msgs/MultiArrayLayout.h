@@ -10,6 +10,8 @@
 #define MultiArrayLayout_md5 ("0fed2a11c13e11c5571b4e2a995a91a3")
 #define MultiArrayLayout_rostype ("std_msgs/MultiArrayLayout")
 
+
+
 typedef struct MultiArrayLayout {
   MultiArrayDimension_t **dim;
   uint32_t data_offset;

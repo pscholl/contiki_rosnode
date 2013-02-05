@@ -10,6 +10,8 @@
 #define Int64MultiArray_md5 ("54865aa6c65be0448113a2afc6a49270")
 #define Int64MultiArray_rostype ("std_msgs/Int64MultiArray")
 
+
+
 typedef struct Int64MultiArray {
   MultiArrayLayout_t layout;
   int64_t *data;

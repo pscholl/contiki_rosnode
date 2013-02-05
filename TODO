@@ -1,7 +1,6 @@
  - add default messages (Header, Time, Duration)
  - write a small tutorial
  - also check in serialize for buf len! i.e. size_check in *_serialize
- - enums needs some attention
  - fix rosarr_n
 
 maybe:

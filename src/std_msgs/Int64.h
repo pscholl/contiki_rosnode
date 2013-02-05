@@ -9,6 +9,8 @@
 #define Int64_md5 ("34add168574510e6e17f5d23ecc077ef")
 #define Int64_rostype ("std_msgs/Int64")
 
+
+
 typedef struct Int64 {
   int64_t data;
 

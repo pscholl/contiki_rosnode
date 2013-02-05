@@ -9,6 +9,13 @@
 #define Log_md5 ("7170d5aec999754ba0d9f762bf49b913")
 #define Log_rostype ("rosserial_msgs/Log")
 
+#define LOG_DEBUG 0
+#define LOG_INFO 1
+#define LOG_WARN 2
+#define LOG_ERROR 3
+#define LOG_FATAL 4
+
+
 typedef struct Log {
   uint8_t level;
   char *msg;

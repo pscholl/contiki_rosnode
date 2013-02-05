@@ -9,6 +9,15 @@
 #define TopicInfo_md5 ("63aa5e8f1bdd6f35c69fe1a1b9d28e9f")
 #define TopicInfo_rostype ("rosserial_msgs/TopicInfo")
 
+#define TOPICINFO_ID_PUBLISHER 0
+#define TOPICINFO_ID_SUBSCRIBER 1
+#define TOPICINFO_ID_SERVICE_SERVER 2
+#define TOPICINFO_ID_SERVICE_CLIENT 4
+#define TOPICINFO_ID_PARAMETER_REQUEST 6
+#define TOPICINFO_ID_LOG 7
+#define TOPICINFO_ID_TIME 10
+
+
 typedef struct TopicInfo {
   uint16_t topic_id;
   char *topic_name;

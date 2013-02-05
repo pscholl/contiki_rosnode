@@ -9,6 +9,8 @@
 #define Char_md5 ("1bf77f25acecdedba0e224b162199717")
 #define Char_rostype ("std_msgs/Char")
 
+
+
 typedef struct Char {
   uint8_t data;
 

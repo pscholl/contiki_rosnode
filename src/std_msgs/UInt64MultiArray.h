@@ -10,6 +10,8 @@
 #define UInt64MultiArray_md5 ("6088f127afb1d6c72927aa1247e945af")
 #define UInt64MultiArray_rostype ("std_msgs/UInt64MultiArray")
 
+
+
 typedef struct UInt64MultiArray {
   MultiArrayLayout_t layout;
   uint64_t *data;

@@ -9,6 +9,8 @@
 #define ColorRGBA_md5 ("a29a96539573343b1310c73607334b00")
 #define ColorRGBA_rostype ("std_msgs/ColorRGBA")
 
+
+
 typedef struct ColorRGBA {
   float r;
   float g;

@@ -9,6 +9,8 @@
 #define UInt16_md5 ("1df79edf208b629fe6b81923a544552d")
 #define UInt16_rostype ("std_msgs/UInt16")
 
+
+
 typedef struct UInt16 {
   uint16_t data;
 

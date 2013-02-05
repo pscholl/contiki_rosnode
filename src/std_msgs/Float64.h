@@ -9,6 +9,8 @@
 #define Float64_md5 ("fdb28210bfa9d7c91146260178d9a584")
 #define Float64_rostype ("std_msgs/Float64")
 
+
+
 typedef struct Float64 {
   float data;
 

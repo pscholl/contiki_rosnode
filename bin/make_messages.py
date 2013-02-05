@@ -150,6 +150,9 @@ class Visitor(object):
         for d in msg.data:
             self.visit(d)
 
+        for d in msg.enums:
+            self.visit(d)
+
         if hasattr(self,"finalize"):
             self.finalize()
         return self
@@ -157,10 +160,11 @@ class Visitor(object):
 #####################################################################
 # Data Types
 class EnumerationType(object):
-    def __init__(self, name, ty, value):
+    def __init__(self, name, ty, value, typename):
         self.name = name
         self.type = ty
         self.value = value
+        self.typename = typename.upper()
 
 class PrimitiveDataType(object):
     def __init__(self, name, ty, bytes):
@@ -237,12 +241,25 @@ class Declaration(Visitor):
         else:
             self.writeln(node, "{node.type} *{node.name};")
 
+    def generic_visit(self,node):
+        pass
+
+class EnumsDeclaration(Visitor):
+    def visit_EnumerationType(self,node):
+        self.writeln(node, "#define {node.typename}_{node.name} {node.value}")
+
+    def generic_visit(self,node):
+        pass
+
 class DeclarationPacked(Declaration):
     def visit_StaticArray(self,node):
         if node.cls == MessageDataType:
             self.writeln(node, "{node.type}_packed {node.name}[{node.size}];")
         else:
             Declaration.visit_StaticArray(self,node)
+
+    def generic_visit(self,node):
+        pass
 
 class Includes(Visitor):
     def __init__(self,out=sys.stdout):
@@ -273,6 +290,9 @@ class Includes(Visitor):
             self.add(node)
 
 class Serialize(Visitor):
+    def generic_visit(self,node):
+        pass
+
     def visit_PrimitiveDataType(self,node):
         if node.bytes == 0:
             str = "unknown size for %s"%node.name
@@ -542,7 +562,7 @@ class Message(object):
                 continue
             ty, name = l[0:2]
             if value != None:
-                self.enums.append( EnumerationType(name, ty, value))
+                self.enums.append( EnumerationType(name, ty, value, self.name))
                 continue
 
             try:
@@ -583,6 +603,7 @@ class Message(object):
                 self.data.append( cls(name, code_type, size) )
 
     def make_header(self, out=sys.stdout):
+        enums = EnumsDeclaration(out=StringIO(),indentation="").onlyattr(self).out.getvalue()
         includes = Includes(out=StringIO()).onlyattr(self).out.getvalue()
         declaration = Declaration(out=StringIO()).onlyattr(self).out.getvalue()
         declaration_packed = DeclarationPacked(out=StringIO()).onlyattr(self).out.getvalue()
@@ -598,6 +619,8 @@ class Message(object):
 
 #define {self.name}_md5 ("{self.md5}")
 #define {self.name}_rostype ("{self.package}/{self.name}")
+
+{enums}
 
 typedef struct {self.name} {{
 {declaration}
