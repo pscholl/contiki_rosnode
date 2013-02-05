@@ -4,7 +4,6 @@
  - also check in serialize for buf len! i.e. size_check in *_serialize
  - enums needs some attention
  - fix rosarr_n
- - remove ros_arch.h include
 
 maybe:
  - checkout 64bit compatibility (it's not there, let's see if we can do anyhow

@@ -1,6 +1,5 @@
 #include <stddef.h>
 #include <ros.h>
-#include <ros_arch.h>
 #include <alloca.h>
 #include "rosserial_msgs/Log.h"
 

@@ -1,6 +1,5 @@
 #include <stddef.h>
 #include <ros.h>
-#include <ros_arch.h>
 #include <alloca.h>
 #include "std_msgs/Float64MultiArray.h"
 
