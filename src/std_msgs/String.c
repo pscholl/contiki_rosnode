@@ -38,9 +38,9 @@ String_deserialize_size(char *buf, char *to, size_t *n)
   // by the message to encode the '\0' of strings. and prefix the length
   // of array for variable sized ones.
 
-  if (*n < (buf-save_ptr)+grow_len)
+  if (*n < (buf-save_ptr) + grow_len + (sizeof(String_t)-sizeof(String_t_packed)))
       return NULL; // check if arrays+strings fit
-  *n = (buf-save_ptr)+grow_len;
+  *n = (buf-save_ptr) + grow_len + (sizeof(String_t)-sizeof(String_t_packed));
 
   if (to==NULL) var_ptr = buf + grow_len + (sizeof(String_t)-sizeof(String_t_packed));
   else          var_ptr = to;
