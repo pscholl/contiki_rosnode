@@ -37,8 +37,8 @@
 # define _rlen(type,args...) (sizeof((type[]){args})/sizeof(type))
 
 # define rosarr(type,args...) ((struct {uint32_t len; type data[_rlen(type,args)];}) {.len=_rlen(type,args), .data={args} }).data
-# define rosarr_n(type,n)     ((struct {uint32_t len; type data[n];}) {.len=n}).data /* XXX: needs fixing */
-# define roslen(ptr)           (ptr==NULL ? 0 : (*(((uint32_t*) ptr)-1)))
+# define rosarr_n(type,n)     ({uint32_t *tmp = alloca(sizeof(uint32_t) + n*sizeof(type)); *tmp = n; tmp += 1;}) /* this is a gnu c extension called statement expression */
+# define roslen(ptr)          (ptr==NULL ? 0 : (*(((uint32_t*) ptr)-1)))
 
 /* it seems there is no fixed endianess of ROS message, so for now we assume
  * that data needs is transmitted in non-network-byte word (i.e. little endian
