@@ -538,6 +538,8 @@ class Message(object):
            ("Duration" in self.name and "std_msgs" in str(self.package)):
             lines = "int32 secs\nint32 nanosecs".split('\n')
             Message.__messages__[self.name.lower()] = self
+            self.name = self.name.lower()
+            self.type = self.name.lower()+"_t"
 
         # parse definition
         for line in lines:
