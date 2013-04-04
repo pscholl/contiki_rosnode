@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/UInt8MultiArray.h"
 
-
 UInt8MultiArray_t*
 UInt8MultiArray_deserialize(char *buf, size_t n) {
   return UInt8MultiArray_deserialize_size(buf,NULL,&n);

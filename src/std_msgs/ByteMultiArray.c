@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/ByteMultiArray.h"
 
-
 ByteMultiArray_t*
 ByteMultiArray_deserialize(char *buf, size_t n) {
   return ByteMultiArray_deserialize_size(buf,NULL,&n);

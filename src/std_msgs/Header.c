@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/Header.h"
 
-
 Header_t*
 Header_deserialize(char *buf, size_t n) {
   return Header_deserialize_size(buf,NULL,&n);

@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/Int32.h"
 
-
 Int32_t*
 Int32_deserialize(char *buf, size_t n) {
   return Int32_deserialize_size(buf,NULL,&n);

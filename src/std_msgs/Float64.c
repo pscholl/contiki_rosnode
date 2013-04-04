@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/Float64.h"
 
-
 Float64_t*
 Float64_deserialize(char *buf, size_t n) {
   return Float64_deserialize_size(buf,NULL,&n);

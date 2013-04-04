@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/ColorRGBA.h"
 
-
 ColorRGBA_t*
 ColorRGBA_deserialize(char *buf, size_t n) {
   return ColorRGBA_deserialize_size(buf,NULL,&n);

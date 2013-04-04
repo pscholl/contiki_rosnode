@@ -8,7 +8,6 @@ ROSTIKI=../../src
 ROSTIKI_MSG=std_msgs contiki_rosnode rosserial_msgs
 
 CONTIKIDIRS += $(ROSTIKI)/ $(foreach DIR,$(ROSTIKI_MSG),$(ROSTIKI)/$(DIR)/)
-CONTIKI_SOURCEFILES += $(notdir $(wildcard $(ROSTIKI)/**/*.c))
 
 # generate the source file list for the required message
 ifneq ($(shell which rospack),)
@@ -19,8 +18,9 @@ ROSTIKI_INCS +=$(patsubst %.msg,%.h,$(ROSTIKI_MSGS))
 $(ROSTIKI_SRCS) $(ROSTIKI_INCS):
 	rosrun contiki_rosnode make_messages.py --path $(ROSTIKI) $(ROSTIKI_MSG)
 
+CONTIKI_SOURCEFILES += rostiki.c
 $(CONTIKI_SOURCEFILES) : $(ROSTIKI_INCS)
-
 endif
 
+CONTIKI_SOURCEFILES += $(notdir $(wildcard $(ROSTIKI)/**/*.c))
 include $(CONTIKI)/Makefile.include

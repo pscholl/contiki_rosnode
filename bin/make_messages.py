@@ -273,7 +273,12 @@ class Includes(Visitor):
         self.out.write("".join(self.set))
 
     def add(self,node):
-        self.set.add("#include <{node.package}/{node.name}.h>\n".format(**locals()))
+        if ("time" in node.name and "std_msgs" in str(node.package)) or\
+           ("duration" in node.name and "std_msgs" in str(node.package)):
+            name = node.name[0].upper() + node.name[1:]
+            self.set.add("#include <{node.package}/{name}.h>\n".format(**locals()))
+        else:
+            self.set.add("#include <{node.package}/{node.name}.h>\n".format(**locals()))
 
     def visit_MessageDataType(self,node):
         node = Message.__messages__[node.type[:-2]]
@@ -650,12 +655,18 @@ size_t
         deserialize = Deserialize(out=StringIO()).dfs(self).out.getvalue()
         deserialize_array = DeserializeArray(out=StringIO()).rdfs(self).out.getvalue()
 
+        if ("time" in self.name and "std_msgs" in str(self.package)) or\
+           ("duration" in self.name and "std_msgs" in str(self.package)):
+            name = self.name[0].upper() + self.name[1:]
+        else:
+            name = self.name
+
+
         out.write(
 """#include <stddef.h>
 #include <ros.h>
 #include <alloca.h>
-#include "{self.package}/{self.name}.h"
-
+#include "{self.package}/{name}.h"
 
 {self.name}_t*
 {self.name}_deserialize(char *buf, size_t n) {{
@@ -782,8 +793,13 @@ class Library(object):
         #sys.exit(-1)
 
         for msg in self.messages:
-            header = open(output_path + "/" + msg.name + ".h", "w")
-            cfile  = open(output_path + "/" + msg.name + ".c", "w")
+            if ("time" in msg.name and "std_msgs" in str(msg.package)) or\
+               ("duration" in msg.name and "std_msgs" in str(msg.package)):
+                header = open(output_path + "/" + msg.name[0].upper() + msg.name[1:] + ".h", "w")
+                cfile  = open(output_path + "/" + msg.name[0].upper() + msg.name[1:] + ".c", "w")
+            else:
+                header = open(output_path + "/" + msg.name + ".h", "w")
+                cfile  = open(output_path + "/" + msg.name + ".c", "w")
             #msg.make_header()
             #msg.make_cfile()
             msg.make_header(header)

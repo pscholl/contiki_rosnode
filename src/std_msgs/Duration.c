@@ -3,16 +3,15 @@
 #include <alloca.h>
 #include "std_msgs/Duration.h"
 
-
-Duration_t*
-Duration_deserialize(char *buf, size_t n) {
-  return Duration_deserialize_size(buf,NULL,&n);
+duration_t*
+duration_deserialize(char *buf, size_t n) {
+  return duration_deserialize_size(buf,NULL,&n);
 }
 
-Duration_t*
-Duration_deserialize_size(char *buf, char *to, size_t *n)
+duration_t*
+duration_deserialize_size(char *buf, char *to, size_t *n)
 {
-  Duration_t  obj_header, *obj=&obj_header;
+  duration_t  obj_header, *obj=&obj_header;
 
   uint32_t grow_len = 0,
            tmp;
@@ -37,11 +36,11 @@ Duration_deserialize_size(char *buf, char *to, size_t *n)
   // by the message to encode the '\0' of strings. and prefix the length
   // of array for variable sized ones.
 
-  if (*n < (buf-save_ptr) + grow_len + (sizeof(Duration_t)-sizeof(Duration_t_packed)))
+  if (*n < (buf-save_ptr) + grow_len + (sizeof(duration_t)-sizeof(duration_t_packed)))
       return NULL; // check if arrays+strings fit
-  *n = (buf-save_ptr) + grow_len + (sizeof(Duration_t)-sizeof(Duration_t_packed));
+  *n = (buf-save_ptr) + grow_len + (sizeof(duration_t)-sizeof(duration_t_packed));
 
-  if (to==NULL) var_ptr = buf + grow_len + (sizeof(Duration_t)-sizeof(Duration_t_packed));
+  if (to==NULL) var_ptr = buf + grow_len + (sizeof(duration_t)-sizeof(duration_t_packed));
   else          var_ptr = to;
 
   buf -= sizeof(int32_t);
@@ -49,16 +48,16 @@ Duration_deserialize_size(char *buf, char *to, size_t *n)
 
 
   if (to!=NULL)
-      save_ptr = var_ptr - sizeof(Duration_t);
+      save_ptr = var_ptr - sizeof(duration_t);
 
   // copy the header back in place.
   memcpy(save_ptr,obj,sizeof(*obj));
 
-  return (Duration_t*) save_ptr;
+  return (duration_t*) save_ptr;
 }
 
 size_t
-Duration_serialize(Duration_t *obj, char *buf, size_t n)
+duration_serialize(duration_t *obj, char *buf, size_t n)
 {
   char *save_ptr=buf;
   uint32_t tmp=0;

@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "contiki_rosnode/TestComplex.h"
 
-
 TestComplex_t*
 TestComplex_deserialize(char *buf, size_t n) {
   return TestComplex_deserialize_size(buf,NULL,&n);

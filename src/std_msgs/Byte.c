@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/Byte.h"
 
-
 Byte_t*
 Byte_deserialize(char *buf, size_t n) {
   return Byte_deserialize_size(buf,NULL,&n);

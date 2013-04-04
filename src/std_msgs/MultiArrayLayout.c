@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/MultiArrayLayout.h"
 
-
 MultiArrayLayout_t*
 MultiArrayLayout_deserialize(char *buf, size_t n) {
   return MultiArrayLayout_deserialize_size(buf,NULL,&n);

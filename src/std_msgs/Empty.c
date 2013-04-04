@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/Empty.h"
 
-
 Empty_t*
 Empty_deserialize(char *buf, size_t n) {
   return Empty_deserialize_size(buf,NULL,&n);

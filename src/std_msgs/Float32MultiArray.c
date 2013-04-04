@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/Float32MultiArray.h"
 
-
 Float32MultiArray_t*
 Float32MultiArray_deserialize(char *buf, size_t n) {
   return Float32MultiArray_deserialize_size(buf,NULL,&n);

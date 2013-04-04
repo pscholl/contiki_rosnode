@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "rosserial_msgs/Log.h"
 
-
 Log_t*
 Log_deserialize(char *buf, size_t n) {
   return Log_deserialize_size(buf,NULL,&n);

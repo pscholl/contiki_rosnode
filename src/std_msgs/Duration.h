@@ -6,31 +6,31 @@
 #include <string.h>
 
 
-#define Duration_md5 ("3e286caf4241d664e55f3ad380e2ae46")
-#define Duration_rostype ("std_msgs/Duration")
+#define duration_md5 ("3e286caf4241d664e55f3ad380e2ae46")
+#define duration_rostype ("std_msgs/duration")
 
 
 
-typedef struct Duration {
+typedef struct duration {
   int32_t secs;
   int32_t nanosecs;
 
-} Duration_t;
+} duration_t;
 
 /* the packed declaration to calculate the proper offset later on */
-typedef struct Duration_packed {
+typedef struct duration_packed {
   int32_t secs;
   int32_t nanosecs;
 
-} __attribute__((__packed__)) Duration_t_packed;
+} __attribute__((__packed__)) duration_t_packed;
 
-Duration_t *
-Duration_deserialize_size(char *buf, char *to, size_t *n);
+duration_t *
+duration_deserialize_size(char *buf, char *to, size_t *n);
 
-Duration_t *
-Duration_deserialize(char *buf, size_t n);
+duration_t *
+duration_deserialize(char *buf, size_t n);
 
 size_t
-Duration_serialize(Duration_t *obj, char *buf, size_t n);
+duration_serialize(duration_t *obj, char *buf, size_t n);
 
 #endif

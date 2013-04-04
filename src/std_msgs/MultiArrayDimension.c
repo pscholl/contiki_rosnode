@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/MultiArrayDimension.h"
 
-
 MultiArrayDimension_t*
 MultiArrayDimension_deserialize(char *buf, size_t n) {
   return MultiArrayDimension_deserialize_size(buf,NULL,&n);

@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/UInt16.h"
 
-
 UInt16_t*
 UInt16_deserialize(char *buf, size_t n) {
   return UInt16_deserialize_size(buf,NULL,&n);

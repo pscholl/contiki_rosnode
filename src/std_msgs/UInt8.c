@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/UInt8.h"
 
-
 UInt8_t*
 UInt8_deserialize(char *buf, size_t n) {
   return UInt8_deserialize_size(buf,NULL,&n);

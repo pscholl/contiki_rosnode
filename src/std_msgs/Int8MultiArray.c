@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/Int8MultiArray.h"
 
-
 Int8MultiArray_t*
 Int8MultiArray_deserialize(char *buf, size_t n) {
   return Int8MultiArray_deserialize_size(buf,NULL,&n);

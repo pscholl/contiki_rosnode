@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/Char.h"
 
-
 Char_t*
 Char_deserialize(char *buf, size_t n) {
   return Char_deserialize_size(buf,NULL,&n);

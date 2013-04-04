@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "rosserial_msgs/TopicInfo.h"
 
-
 TopicInfo_t*
 TopicInfo_deserialize(char *buf, size_t n) {
   return TopicInfo_deserialize_size(buf,NULL,&n);

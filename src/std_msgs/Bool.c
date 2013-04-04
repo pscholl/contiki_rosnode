@@ -3,7 +3,6 @@
 #include <alloca.h>
 #include "std_msgs/Bool.h"
 
-
 Bool_t*
 Bool_deserialize(char *buf, size_t n) {
   return Bool_deserialize_size(buf,NULL,&n);
