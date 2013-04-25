@@ -1,11 +1,11 @@
-all: hello-subscriber
+all: ping-publisher
 
 UIP_CONF_IPV6=1
 UIP_CONF_RPL=1
 
 CONTIKI=../../../contiki
 ROSTIKI=../../src
-ROSTIKI_MSG=std_msgs rosserial_msgs
+ROSTIKI_MSG=std_msgs rosserial_msgs challenge_msgs
 
 CONTIKIDIRS += $(ROSTIKI)/ $(foreach DIR,$(ROSTIKI_MSG),$(ROSTIKI)/$(DIR)/)
 CONTIKI_SOURCEFILES += rostiki.c

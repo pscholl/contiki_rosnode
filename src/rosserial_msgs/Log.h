@@ -6,10 +6,10 @@
 #include <string.h>
 
 
-#define Log_md5 ("7170d5aec999754ba0d9f762bf49b913")
+#define Log_md5 ("11abd731c25933261cd6183bd12d6295")
 #define Log_rostype ("rosserial_msgs/Log")
 
-#define LOG_DEBUG 0
+#define LOG_ROSDEBUG 0
 #define LOG_INFO 1
 #define LOG_WARN 2
 #define LOG_ERROR 3
