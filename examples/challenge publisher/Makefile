@@ -7,7 +7,6 @@ CONTIKI=../../../contiki
 ROSTIKI=../../src
 ROSTIKI_MSG=std_msgs rosserial_msgs challenge_msgs
 
-CONTIKIDIRS += $(ROSTIKI)/ $(foreach DIR,$(ROSTIKI_MSG),$(ROSTIKI)/$(DIR)/)
 CONTIKI_SOURCEFILES += rostiki.c
 
 # generate the source file list for the required message
@@ -24,3 +23,6 @@ endif
 
 CONTIKI_SOURCEFILES += $(notdir $(wildcard $(ROSTIKI)/**/*.c))
 include $(CONTIKI)/Makefile.include
+
+SOURCEDIRS += $(ROSTIKI)
+vpath %.c $(foreach DIR,$(ROSTIKI_MSG),$(ROSTIKI)/$(DIR)/)
