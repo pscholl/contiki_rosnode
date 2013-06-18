@@ -22,8 +22,8 @@
 #include <rosserial_msgs/TopicInfo.h>
 #include <time.h>
 
-#define SEND_INTERVAL_FAST  CLOCK_SECOND/4
-#define SEND_INTERVAL_SLOW  CLOCK_SECOND*4
+#define SEND_INTERVAL_FAST  CLOCK_CONF_SECOND*4 //4
+#define SEND_INTERVAL_SLOW  CLOCK_CONF_SECOND*16
 static clock_time_t send_interval = SEND_INTERVAL_SLOW;
 
 #define UIP_UDPAPPDATA_SIZE  (UIP_BUFSIZE - UIP_LLH_LEN - UIP_IPUDPH_LEN)
@@ -56,6 +56,27 @@ static uint16_t alloc_topic_id()
   return id++;
 }
 
+void
+uip_udp_packet_send_nocp(struct uip_udp_conn *c, int len)
+{
+  extern uint16_t uip_slen;
+
+#if UIP_UDP
+  uip_udp_conn = c;
+  uip_slen = len;
+  uip_process(UIP_UDP_SEND_CONN);
+#if UIP_CONF_IPV6
+  tcpip_ipv6_output();
+#else
+  if(uip_len > 0) {
+    tcpip_output();
+  }
+#endif
+  uip_slen = 0;
+#endif /* UIP_UDP */
+}
+
+
 void rostiki_pub(Topic_t* topic, void* msg)
 {
   rosserial_header *obj_rosserial_header = UIP_UDPAPPDATA_PTR;
@@ -84,7 +105,7 @@ void rostiki_pub(Topic_t* topic, void* msg)
   obj_rosserial_header->msg_length = topic->p_serialize(msg,
       UIP_UDPAPPDATA_PTR+sizeof(*obj_rosserial_header), UIP_UDPAPPDATA_SIZE);
 
-  uip_udp_packet_send(client_conn, UIP_UDPAPPDATA_PTR,
+  uip_udp_packet_send_nocp(client_conn,
       sizeof(*obj_rosserial_header)+obj_rosserial_header->msg_length);
 }
 
@@ -123,7 +144,7 @@ static void advertise_and_subscribe() {
     obj_rosserial_header->msg_length= TopicInfo_serialize(&(topic->topic_info),
         UIP_UDPAPPDATA_PTR+sizeof(*obj_rosserial_header), UIP_APPDATA_SIZE);
 
-    uip_udp_packet_send(client_conn, UIP_UDPAPPDATA_PTR,
+    uip_udp_packet_send_nocp(client_conn,
         sizeof(*obj_rosserial_header)+obj_rosserial_header->msg_length);
   }
 
@@ -134,7 +155,7 @@ static void advertise_and_subscribe() {
     obj_rosserial_header->msg_length= TopicInfo_serialize(&(topic->topic_info),
         UIP_UDPAPPDATA_PTR+sizeof(*obj_rosserial_header), UIP_APPDATA_SIZE);
 
-    uip_udp_packet_send(client_conn, UIP_UDPAPPDATA_PTR,
+    uip_udp_packet_send_nocp(client_conn,
         sizeof(*obj_rosserial_header)+obj_rosserial_header->msg_length);
   }
 }
@@ -151,6 +172,7 @@ static void tcpip_handler() {
     if (obj_rosserial_header->topic_id == ID_PUBLISHER ||
         obj_rosserial_header->topic_id == ID_SUBSCRIBER) {
       /* XXX acknowledgement to our advertise/subscribe request */
+      printf("got subscribed!\n");
       send_interval = SEND_INTERVAL_SLOW;
       return;
     }
@@ -192,7 +214,7 @@ PROCESS_THREAD(rostiki_process, ev, data)
 
     PRINTF("UDP client process started\n");
     print_local_addresses();
-    uip_ip6addr(&ipaddr,0xaaaa,0,0,0,0,0,0,12);
+    uip_ip6addr(&ipaddr,0xaaaa,0,0,0,0,0,0,0xff);
 
     /* new connection with remote host */
     client_conn = udp_new(&ipaddr, UIP_HTONS(3000), NULL);

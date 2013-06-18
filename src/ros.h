@@ -50,10 +50,15 @@
 #   define ROS_READ16(ptr) (*(uint16_t*) (ptr))
 #   define ROS_READ8(ptr)  (*(uint8_t*) (ptr))
 
+//#   define ROS_WRITE64(buf,x) (buf)
+//#   define ROS_WRITE32(buf,x) (*(uint32_t*) (buf)=x)
+//#   define ROS_WRITE16(buf,x) (*(uint16_t*) (buf)=x)
+//#   define ROS_WRITE8(buf,x)  (*(uint8_t*)  (buf)=x)
+
 #   define ROS_WRITE64(buf,x) (buf)
-#   define ROS_WRITE32(buf,x) (*(uint32_t*) (buf)=x)
-#   define ROS_WRITE16(buf,x) (*(uint16_t*) (buf)=x)
-#   define ROS_WRITE8(buf,x)  (*(uint8_t*)  (buf)=x)
+#   define ROS_WRITE32(buf,x) (memcpy(buf,(void*) &x,sizeof(uint32_t)))
+#   define ROS_WRITE16(buf,x) (memcpy(buf,(void*) &x,sizeof(uint16_t)))
+#   define ROS_WRITE8(buf,x)  (memcpy(buf,(void*) &x,sizeof(uint8_t)))
 # else
 #  define ROS_HTONS(n)  (uint16_t)((((uint16_t) (n)) << 8) | (((uint16_t) (n)) >> 8))
 #  define ROS_HTONL(n)  (((uint32_t)ROS_HTONS(n) << 16) | ROS_HTONS((uint32_t)(n) >> 16))
